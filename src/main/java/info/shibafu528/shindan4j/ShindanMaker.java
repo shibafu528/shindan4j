@@ -50,10 +50,6 @@ public class ShindanMaker {
             throw new IOException("meta[property=og:description]がHTML上に見つかりません\nURL:" + url);
         }
         String desc = descElement.attr("content");
-        //POST先URLを取得
-        //TODO: これいるのかなあ、仕様変更があったからもう不要かもしれない
-        String post = doc.select("form[id=form]").first().attr("action");
-        post = "http://shindanmaker.com" + post;
         //テーマラベルを取得
         List<String> theme = new ArrayList<>();
         Elements themes = doc.select("a[class=themelabel]");
@@ -83,7 +79,7 @@ public class ShindanMaker {
                 0, favs,
                 doc.select("a[class=hotlabel]").first() != null,
                 doc.select("a[class=pickuplabel]").first() != null,
-                post
+                url
         );
     }
 
