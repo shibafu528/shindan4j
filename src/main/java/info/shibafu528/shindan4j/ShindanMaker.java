@@ -5,8 +5,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.swing.text.NumberFormatter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -22,6 +25,11 @@ public class ShindanMaker {
     private static final Pattern[] PROFILE_PATTERNS = new Pattern[]{
             Pattern.compile("作成した診断：([0-9,]+) 個"),
             Pattern.compile("診断された回数：([0-9,]+) 回")
+    };
+
+    private static final Pattern[] INLINELIST_PATTERNS = new Pattern[] {
+            Pattern.compile("(\\d{1,3}(?:,\\d{3})*)人が診断"),
+            Pattern.compile("結果パターン(\\d{1,3}(?:,\\d{3})*)通り")
     };
 
     private ShindanMaker() {}
@@ -42,12 +50,12 @@ public class ShindanMaker {
         //タイトル、説明文を取得
         Element titleElement = meta.select("*[property=og:title]").first();
         if (titleElement == null) {
-            throw new IOException("meta[property=og:title]がHTML上に見つかりません\nURL:" + url);
+            throw new IOException("タイトル<meta property=\"og:title\">がHTML上に見つかりません\nURL:" + url);
         }
         String title = titleElement.attr("content");
         Element descElement = meta.select("*[property=og:description]").first();
         if (descElement == null) {
-            throw new IOException("meta[property=og:description]がHTML上に見つかりません\nURL:" + url);
+            throw new IOException("説明文<meta property=\"og:description\">がHTML上に見つかりません\nURL:" + url);
         }
         String desc = descElement.attr("content");
         //テーマラベルを取得
@@ -60,8 +68,7 @@ public class ShindanMaker {
         int favs = 0;
         Elements favlabel = doc.select("a[class=favlabel]");
         if (favlabel.first() != null) {
-            Pattern p = Pattern.compile("★(\\d)+");
-            Matcher m = p.matcher(favlabel.first().text());
+            Matcher m = Pattern.compile("★(\\d+)").matcher(favlabel.first().text());
             if (m.find()) {
                 favs = Integer.valueOf(m.group(1));
             }
@@ -69,17 +76,30 @@ public class ShindanMaker {
         //作者名を取得
         Elements elemAuthor = doc.select("a[href^=/author/]");
         String author = ((elemAuthor != null)? elemAuthor.select("a").text() : null);
+        //アクセスカウンターや結果パターン数を取得する
+        //TODO: 結果パターン数も活用したい
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        Element inlinelist = doc.select("ul[class=inlinelist]").first();
+        int inlinelistNums[] = new int[INLINELIST_PATTERNS.length];
+        for (Element element : inlinelist.children()) {
+            for (int i = 0; i < INLINELIST_PATTERNS.length; i++) {
+                Matcher matcher = INLINELIST_PATTERNS[i].matcher(element.text());
+                if (matcher.find()) {
+                    try {
+                        inlinelistNums[i] = numberFormat.parse(matcher.group(1)).intValue();
+                    } catch (ParseException ignored) {}
+                }
+            }
+        }
         //説明文の接尾辞を削除する
         desc = desc.substring(0, desc.length() - 9);
         //インスタンスを返す
-        //TODO: hashTag, accessCountのスクレイピング
         return new ShindanPage(
                 pageId, title, desc, author,
-                "STUB", theme,
-                0, favs,
+                "", theme,
+                inlinelistNums[0], favs,
                 doc.select("a[class=hotlabel]").first() != null,
-                doc.select("a[class=pickuplabel]").first() != null,
-                url
+                doc.select("a[class=pickuplabel]").first() != null
         );
     }
 
@@ -114,8 +134,7 @@ public class ShindanMaker {
         Elements profile = doc.select("div[class=authorprofile_s]");
         for (Element span : profile.select("span")) {
             for (int i = 0; i < PROFILE_PATTERNS.length; i++) {
-                Pattern profilePattern = PROFILE_PATTERNS[i];
-                Matcher m = profilePattern.matcher(span.text());
+                Matcher m = PROFILE_PATTERNS[i].matcher(span.text());
                 if (m.find()) {
                     counters[i] = Integer.valueOf(m.group(1).replace(",", ""));
                 }
