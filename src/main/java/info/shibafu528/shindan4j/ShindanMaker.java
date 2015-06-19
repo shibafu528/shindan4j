@@ -5,9 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.swing.text.NumberFormatter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -160,6 +158,10 @@ public class ShindanMaker {
                 //タイトルとID
                 Elements elemTitle = e.select("a[class=list_title]");
                 String title = elemTitle.text();
+                if (title == null || "".equals(title)) {
+                    //タイトル無いやつとか少なくとも診断では無さそうなので飛ばす
+                    continue;
+                }
                 int pageId = Integer.valueOf(elemTitle.attr("href").replaceAll("[a-zA-Z-/]", ""));
                 //カウンター
                 Elements elemNum = e.select("span[class=list_num]");
