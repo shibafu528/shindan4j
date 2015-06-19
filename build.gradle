@@ -1,8 +1,11 @@
 apply plugin: 'java'
+apply plugin: 'maven'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
-version = '1.0'
+
+group = 'com.github.shibafu528'
+version = '0.1.1'
 
 repositories {
     mavenCentral()
