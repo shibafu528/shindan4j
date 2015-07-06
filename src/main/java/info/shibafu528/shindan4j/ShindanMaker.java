@@ -72,7 +72,7 @@ public class ShindanMaker {
             }
         }
         //作者名を取得
-        Elements elemAuthor = doc.select("a[href^=/author/]");
+        Elements elemAuthor = doc.select("a[href^=/author/]:not(:has(button))");
         String author = ((elemAuthor != null)? elemAuthor.select("a").text() : null);
         //アクセスカウンターや結果パターン数を取得する
         //TODO: 結果パターン数も活用したい
