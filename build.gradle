@@ -1,11 +1,8 @@
 apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
-
-group = 'com.github.shibafu528'
-version = '0.1.1'
 
 repositories {
     mavenCentral()
@@ -14,4 +11,16 @@ repositories {
 dependencies {
     compile 'org.jsoup:jsoup:+'
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'com.github.shibafu528'
+            artifactId 'shindan4j'
+            version '0.1.2'
+
+            from components.java
+        }
+    }
 }
