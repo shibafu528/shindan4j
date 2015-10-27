@@ -22,9 +22,9 @@ class ShindanPage extends Summary{
     public ShindanResult shindan(String name) throws IOException {
         Document doc = Jsoup.connect(getPageUrl()).data("u", name).timeout(20000).post();
         //結果を取得
-        Element shareElem = doc.select("textarea[onclick=this.focus();this.select()]").first();
+        Element shareElem = doc.select("textarea#copy_text_140").first();
         if (shareElem == null) {
-            throw new IOException("textarea[onclick=this.focus();this.select()]がHTML上に見つかりません\nURL:" + getPageUrl());
+            throw new IOException("textarea#copy_text_140 がHTML上に見つかりません\nURL:" + getPageUrl());
         }
         String share = shareElem.text();
         String display = share.replaceAll("[ \n]" + getPageUrl() + "$", "");
