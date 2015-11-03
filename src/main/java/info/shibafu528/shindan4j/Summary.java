@@ -37,7 +37,7 @@ class Summary implements Shindan {
 
     public Summary setPageId(int pageId) {
         this.pageId = pageId;
-        this.pageUrl = "http://shindanmaker.com/" + pageId;
+        this.pageUrl = "https://shindanmaker.com/" + pageId;
         return this;
     }
 

@@ -41,7 +41,7 @@ public class ShindanMaker {
     }
 
     public static Shindan getShindan(int pageId) throws IOException {
-        String url = "http://shindanmaker.com/" + pageId;
+        String url = "https://shindanmaker.com/" + pageId;
         Document doc = getDocument(url);
         //METAタグを取得
         Elements meta = doc.select("meta");

@@ -20,7 +20,7 @@ public enum ListMode {
     SEARCH,
     THEME("tag");
 
-    private static final String LISTPAGE_URL = "http://shindanmaker.com/c/list?";
+    private static final String LISTPAGE_URL = "https://shindanmaker.com/c/list?";
 
     private String value;
 

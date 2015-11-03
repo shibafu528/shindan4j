@@ -11,7 +11,7 @@ public enum AuthorListMode {
     POPULAR,
     NAME;
 
-    private static final String LISTPAGE_URL = "http://shindanmaker.com/author/";
+    private static final String LISTPAGE_URL = "https://shindanmaker.com/author/";
 
     public String toUrlString(String screenName, int page, String... queries) throws UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder(LISTPAGE_URL);
