@@ -20,7 +20,11 @@ class ShindanPage extends Summary{
 
     @Override
     public ShindanResult shindan(String name) throws IOException {
-        Document doc = Jsoup.connect(getPageUrl()).data("u", name).timeout(20000).post();
+        Document doc = Jsoup.connect(getPageUrl())
+                .userAgent(ShindanMaker.getUserAgent())
+                .timeout(ShindanMaker.getTimeout())
+                .data("u", name)
+                .post();
         //結果を取得
         Element shareElem = doc.select("textarea#copy_text_140").first();
         if (shareElem == null) {

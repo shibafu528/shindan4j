@@ -32,8 +32,16 @@ public class ShindanMaker {
 
     private ShindanMaker() {}
 
+    public static int getTimeout() {
+        return timeout;
+    }
+
     public static void setTimeout(int millis) {
         ShindanMaker.timeout = millis;
+    }
+
+    public static String getUserAgent() {
+        return userAgent;
     }
 
     public static void setUserAgent(String userAgent) {
