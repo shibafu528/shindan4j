@@ -12,15 +12,18 @@ import java.util.List;
  */
 class ShindanPage extends Summary{
 
+    private String postUrl;
+
     ShindanPage(int pageId, String title, String description, String authorName,
                 String hashTag, List<String> themes,
-                int accessCount, int favoritedCount, boolean isHot, boolean isPickup) {
+                int accessCount, int favoritedCount, boolean isHot, boolean isPickup, String postUrl) {
         super(pageId, title, description, authorName, hashTag, themes, accessCount, favoritedCount, isHot, isPickup);
+        this.postUrl = postUrl;
     }
 
     @Override
     public ShindanResult shindan(String name) throws IOException {
-        Document doc = Jsoup.connect(getPageUrl())
+        Document doc = Jsoup.connect(postUrl)
                 .userAgent(ShindanMaker.getUserAgent())
                 .timeout(ShindanMaker.getTimeout())
                 .data("u", name)

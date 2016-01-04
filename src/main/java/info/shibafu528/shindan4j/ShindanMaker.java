@@ -99,13 +99,17 @@ public class ShindanMaker {
         }
         //説明文の接尾辞を削除する
         desc = desc.substring(0, desc.length() - 9);
+        //POST先URLを取得
+        String postUrl = doc.select("form#form").first().attr("action");
+        postUrl = "https://shindanmaker.com" + postUrl;
         //インスタンスを返す
         return new ShindanPage(
                 pageId, title, desc, author,
                 "", theme,
                 inlinelistNums[0], favs,
                 doc.select("a[class=hotlabel]").first() != null,
-                doc.select("a[class=pickuplabel]").first() != null
+                doc.select("a[class=pickuplabel]").first() != null,
+                postUrl
         );
     }
 
