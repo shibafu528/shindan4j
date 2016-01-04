@@ -127,9 +127,9 @@ public class ShindanMaker {
 
     public static List<Shindan> themeSearch(String theme, int page, boolean orderByNew) throws IOException {
         if (orderByNew) {
-            return getListElements(getDocument(ListMode.SEARCH.toUrlString(page, "tag", theme, "order", "new")));
+            return getListElements(getDocument(ListMode.THEME.toUrlString(page, "tag", theme, "order", "new")));
         }else {
-            return getListElements(getDocument(ListMode.SEARCH.toUrlString(page, "tag", theme)));
+            return getListElements(getDocument(ListMode.THEME.toUrlString(page, "tag", theme)));
         }
     }
 
