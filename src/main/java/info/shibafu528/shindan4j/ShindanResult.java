@@ -9,13 +9,15 @@ public class ShindanResult implements Serializable {
     private Shindan page;
     private String name;
     private String displayResult;
-    private String shareResult;
+    private String fullShareResult;
+    private String shortShareResult;
 
-    public ShindanResult(Shindan page, String name, String displayResult, String shareResult) {
+    public ShindanResult(Shindan page, String name, String displayResult, String fullShareResult, String shortShareResult) {
         this.page = page;
         this.name = name;
         this.displayResult = displayResult;
-        this.shareResult = shareResult;
+        this.fullShareResult = fullShareResult;
+        this.shortShareResult = shortShareResult;
     }
 
     public Shindan getPage() {
@@ -30,7 +32,16 @@ public class ShindanResult implements Serializable {
         return displayResult;
     }
 
+    @Deprecated
     public String getShareResult() {
-        return shareResult;
+        return shortShareResult;
+    }
+
+    public String getFullShareResult() {
+        return fullShareResult;
+    }
+
+    public String getShortShareResult() {
+        return shortShareResult;
     }
 }

@@ -29,13 +29,21 @@ class ShindanPage extends Summary{
                 .data("u", name)
                 .post();
         //結果を取得
+        Element fullElem = doc.select("textarea#copy_text").first();
         Element shareElem = doc.select("textarea#copy_text_140").first();
         if (shareElem == null) {
             throw new IOException("textarea#copy_text_140 がHTML上に見つかりません\nURL:" + getPageUrl());
         }
-        String share = shareElem.text();
-        String display = share.replaceAll("[ \n]" + getPageUrl() + "$", "");
-        return new ShindanResult(this, name, display, share);
+        //フルの診断結果が格納されている要素を判定
+        Element longestResultElem;
+        if (fullElem == null) {
+            //全文コピペ用textareaがない場合、通常のコピペ用textareaを使う
+            longestResultElem = shareElem;
+        } else {
+            longestResultElem = fullElem;
+        }
+        String displayResult = longestResultElem.text().replaceAll("[ \n]" + getPageUrl() + "$", "");
+        return new ShindanResult(this, name, displayResult, longestResultElem.text(), shareElem.text());
     }
 
     @Override
