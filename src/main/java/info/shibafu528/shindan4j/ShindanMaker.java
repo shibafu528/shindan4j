@@ -51,19 +51,19 @@ public class ShindanMaker {
     public static Shindan getShindan(int pageId) throws IOException {
         String url = "https://shindanmaker.com/" + pageId;
         Document doc = getDocument(url);
-        //METAタグを取得
-        Elements meta = doc.select("meta");
+        //タイトルブロックを取得
+        Elements titleBlock = doc.select("div.shindantitle_block");
         //タイトル、説明文を取得
-        Element titleElement = meta.select("*[property=og:title]").first();
+        Element titleElement = titleBlock.select("div.shindantitle2").first();
         if (titleElement == null) {
-            throw new IOException("タイトル<meta property=\"og:title\">がHTML上に見つかりません\nURL:" + url);
+            throw new IOException("タイトル<div class=\"shindantitle2\">がHTML上に見つかりません\nURL:" + url);
         }
-        String title = titleElement.attr("content");
-        Element descElement = meta.select("*[property=og:description]").first();
+        String title = titleElement.text().trim();
+        Element descElement = titleBlock.select("div.shindandescription").first();
         if (descElement == null) {
-            throw new IOException("説明文<meta property=\"og:description\">がHTML上に見つかりません\nURL:" + url);
+            throw new IOException("説明文<div class=\"shindandescription\">がHTML上に見つかりません\nURL:" + url);
         }
-        String desc = descElement.attr("content");
+        String desc = descElement.text().trim();
         //テーマラベルを取得
         List<String> theme = new ArrayList<>();
         Elements themes = doc.select("a[class=themelabel]");
@@ -97,8 +97,6 @@ public class ShindanMaker {
                 }
             }
         }
-        //説明文の接尾辞を削除する
-        desc = desc.substring(0, desc.length() - 9);
         //POST先URLを取得
         String postUrl = doc.select("form#form").first().attr("action");
         postUrl = "https://shindanmaker.com" + postUrl;

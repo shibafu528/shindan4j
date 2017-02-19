@@ -18,7 +18,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId 'info.shibafu528.shindan4j'
             artifactId 'shindan4j'
-            version '0.1.7'
+            version '0.1.8'
 
             from components.java
         }
