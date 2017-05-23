@@ -82,20 +82,14 @@ public class ShindanMaker {
         //作者名を取得
         Elements elemAuthor = doc.select("a[href^=/author/]:not(:has(button))");
         String author = ((elemAuthor != null)? elemAuthor.select("a").text() : null);
-        //アクセスカウンターや結果パターン数を取得する
-        //TODO: 結果パターン数も活用したい
+        //アクセスカウンターを取得
+        int accessCounter = 0;
         NumberFormat numberFormat = NumberFormat.getInstance();
-        Element inlinelist = doc.select("ul[class=inlinelist]").first();
-        int inlinelistNums[] = new int[INLINELIST_PATTERNS.length];
-        for (Element element : inlinelist.children()) {
-            for (int i = 0; i < INLINELIST_PATTERNS.length; i++) {
-                Matcher matcher = INLINELIST_PATTERNS[i].matcher(element.text());
-                if (matcher.find()) {
-                    try {
-                        inlinelistNums[i] = numberFormat.parse(matcher.group(1)).intValue();
-                    } catch (ParseException ignored) {}
-                }
-            }
+        Element doneNumber = doc.select(".shindanstats_donenumber").first();
+        if (doneNumber != null) {
+            try {
+                accessCounter = numberFormat.parse(doneNumber.text()).intValue();
+            } catch (ParseException ignored) {}
         }
         //POST先URLを取得
         String postUrl = doc.select("form#form").first().attr("action");
@@ -104,7 +98,7 @@ public class ShindanMaker {
         return new ShindanPage(
                 pageId, title, desc, author,
                 "", theme,
-                inlinelistNums[0], favs,
+                accessCounter, favs,
                 doc.select("a[class=hotlabel]").first() != null,
                 doc.select("a[class=pickuplabel]").first() != null,
                 postUrl
