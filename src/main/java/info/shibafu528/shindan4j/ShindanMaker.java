@@ -67,9 +67,9 @@ public class ShindanMaker {
         }
         //Fav数を取得
         int favs = 0;
-        Elements favlabel = doc.select("a[class=favlabel]");
+        Elements favlabel = doc.select("span[class*=favlabel]");
         if (favlabel.first() != null) {
-            Matcher m = Pattern.compile("★(\\d+)").matcher(favlabel.first().text());
+            Matcher m = Pattern.compile("(\\d+)").matcher(favlabel.first().text());
             if (m.find()) {
                 favs = Integer.valueOf(m.group(1));
             }
