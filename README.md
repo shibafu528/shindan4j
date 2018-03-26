@@ -1,6 +1,6 @@
 shindan4j
 =========
-[![Build Status](https://travis-ci.org/shibafu528/shindan4j.svg?branch=master)](https://travis-ci.org/shibafu528/shindan4j)
+[![Build Status](https://travis-ci.org/shibafu528/shindan4j.svg?branch=master)](https://travis-ci.org/shibafu528/shindan4j) [![](https://jitpack.io/v/shibafu528/shindan4j.svg)](https://jitpack.io/#shibafu528/shindan4j)
 
 jsoupを用い、Javaで診断メーカーの結果を取得できるようにするライブラリです。
 
