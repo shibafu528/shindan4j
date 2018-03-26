@@ -24,7 +24,7 @@ public class ShindanMakerTest {
     public void testPostShindan() throws Exception {
         ShindanResult result = ShindanMaker.getShindan(258437).shindan("名前name");
         System.out.println(result.getDisplayResult() + " : " + result.getPage());
-        Assert.assertEquals(result.getDisplayResult(), "名前name.");
+        Assert.assertEquals("名前name.", result.getDisplayResult());
     }
 
     @Test
