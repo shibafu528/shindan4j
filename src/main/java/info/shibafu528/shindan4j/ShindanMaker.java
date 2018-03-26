@@ -90,11 +90,11 @@ public class ShindanMaker {
             } catch (ParseException ignored) {}
         }
         //結果パターン数を取得
-        int resultPatterns = 0;
+        long resultPatterns = 0;
         Element elemResultPattern = doc.select("span.shindanstats_label b").first();
         if (elemResultPattern != null) {
             try {
-                resultPatterns = numberFormat.parse(elemResultPattern.text()).intValue();
+                resultPatterns = numberFormat.parse(elemResultPattern.text()).longValue();
             } catch (ParseException ignored) {}
         }
         //POST先URLを取得

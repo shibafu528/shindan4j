@@ -16,7 +16,7 @@ class ShindanPage extends Summary{
 
     ShindanPage(int pageId, String title, String description, String authorName,
                 String hashTag, List<String> themes,
-                int accessCount, int favoritedCount, int resultPatterns, boolean isHot, boolean isPickup, String postUrl) {
+                int accessCount, int favoritedCount, long resultPatterns, boolean isHot, boolean isPickup, String postUrl) {
         super(pageId, title, description, authorName, hashTag, themes, accessCount, favoritedCount, resultPatterns, isHot, isPickup);
         this.postUrl = postUrl;
     }
