@@ -8,29 +8,29 @@ import java.util.List;
  * Created by shibafu on 14/06/15.
  */
 public interface Shindan extends Serializable{
-    public int getPageId();
+    int getPageId();
 
-    public String getPageUrl();
+    String getPageUrl();
 
-    public String getTitle();
+    String getTitle();
 
-    public String getDescription();
+    String getDescription();
 
-    public String getAuthorName();
+    String getAuthorName();
 
-    public String getHashTag();
+    String getHashTag();
 
-    public List<String> getThemes();
+    List<String> getThemes();
 
-    public int getAccessCount();
+    int getAccessCount();
 
-    public int getFavoritedCount();
+    int getFavoritedCount();
 
     int getResultPatterns();
 
-    public boolean isHot();
+    boolean isHot();
 
-    public boolean isPickup();
+    boolean isPickup();
 
-    public ShindanResult shindan(String name) throws IOException;
+    ShindanResult shindan(String name) throws IOException;
 }
