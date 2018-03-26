@@ -16,8 +16,8 @@ class ShindanPage extends Summary{
 
     ShindanPage(int pageId, String title, String description, String authorName,
                 String hashTag, List<String> themes,
-                int accessCount, int favoritedCount, boolean isHot, boolean isPickup, String postUrl) {
-        super(pageId, title, description, authorName, hashTag, themes, accessCount, favoritedCount, isHot, isPickup);
+                int accessCount, int favoritedCount, int resultPatterns, boolean isHot, boolean isPickup, String postUrl) {
+        super(pageId, title, description, authorName, hashTag, themes, accessCount, favoritedCount, resultPatterns, isHot, isPickup);
         this.postUrl = postUrl;
     }
 
@@ -48,9 +48,9 @@ class ShindanPage extends Summary{
 
     @Override
     public String toString() {
-        return String.format("「%s」by %s (%s) / %s (a%d,f%d,%s,%s)", getTitle(), getAuthorName(), getPageUrl(),
+        return String.format("「%s」by %s (%s) / %s (a%d,f%d,p%d,%s,%s)", getTitle(), getAuthorName(), getPageUrl(),
                 getDescription(),
-                getAccessCount(), getFavoritedCount(),
+                getAccessCount(), getFavoritedCount(), getResultPatterns(),
                 isHot()? "HOT":"",
                 isPickup()? "PICKUP":"");
     }

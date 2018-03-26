@@ -12,12 +12,16 @@ public class ShindanMakerTest {
 
     @Test
     public void testGetShindan() throws Exception {
-        int[] shindans = {438894, 459592, 324271, 181846, 220337, 18312, 201828, 322469};
-        for (int id : shindans) {
-            Shindan s = ShindanMaker.getShindan(id);
-            Assert.assertNotNull(s);
-            System.out.println(s);
-        }
+        Shindan s = ShindanMaker.getShindan(438894);
+        Assert.assertNotNull(s);
+        Assert.assertEquals(438894, s.getPageId());
+        Assert.assertEquals("おしりターボ", s.getTitle());
+        Assert.assertEquals("ボーボボ", s.getDescription());
+        Assert.assertEquals("Getaji", s.getAuthorName());
+        Assert.assertEquals(64, s.getResultPatterns());
+        Assert.assertThat(s.getThemes(), CoreMatchers.hasItem("身内ネタ"));
+        Assert.assertThat(s.getThemes(), CoreMatchers.not(CoreMatchers.hasItem("みんなの診断結果")));
+        System.out.println(s);
     }
 
     @Test

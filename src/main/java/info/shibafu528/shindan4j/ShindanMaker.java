@@ -86,6 +86,12 @@ public class ShindanMaker {
                 accessCounter = numberFormat.parse(doneNumber.text()).intValue();
             } catch (ParseException ignored) {}
         }
+        //結果パターン数を取得
+        int resultPatterns = 0;
+        Element elemResultPattern = doc.select("span.shindanstats_label b").first();
+        if (elemResultPattern != null) {
+            resultPatterns = Integer.valueOf(elemResultPattern.text());
+        }
         //POST先URLを取得
         String postUrl = doc.select("form#form").first().attr("action");
         postUrl = "https://shindanmaker.com" + postUrl;
@@ -93,11 +99,10 @@ public class ShindanMaker {
         return new ShindanPage(
                 pageId, title, desc, author,
                 "", theme,
-                accessCounter, favs,
+                accessCounter, favs, resultPatterns,
                 doc.select("a[class=hotlabel]").first() != null,
                 doc.select("a[class=pickuplabel]").first() != null,
-                postUrl
-        );
+                postUrl);
     }
 
     public static List<Shindan> getList(ListMode mode, int page) throws IOException {

@@ -17,12 +17,13 @@ class Summary implements Shindan {
     private List<String> themes;
     private int accessCount;
     private int favoritedCount;
+    private int resultPatterns;
     private boolean isHot;
     private boolean isPickup;
 
     Summary() {}
 
-    Summary(int pageId, String title, String description, String authorName, String hashTag, List<String> themes, int accessCount, int favoritedCount, boolean isHot, boolean isPickup) {
+    Summary(int pageId, String title, String description, String authorName, String hashTag, List<String> themes, int accessCount, int favoritedCount, int resultPatterns, boolean isHot, boolean isPickup) {
         setPageId(pageId);
         this.title = title;
         this.description = description;
@@ -31,6 +32,7 @@ class Summary implements Shindan {
         this.themes = themes;
         this.accessCount = accessCount;
         this.favoritedCount = favoritedCount;
+        this.resultPatterns = resultPatterns;
         this.isHot = isHot;
         this.isPickup = isPickup;
     }
@@ -120,6 +122,10 @@ class Summary implements Shindan {
 
     public int getFavoritedCount() {
         return favoritedCount;
+    }
+
+    public int getResultPatterns() {
+        return resultPatterns;
     }
 
     public boolean isHot() {
