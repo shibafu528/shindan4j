@@ -63,7 +63,10 @@ public class ShindanMaker {
         List<String> theme = new ArrayList<>();
         Elements themes = doc.select("a[class=themelabel]");
         for (Element e : themes) {
-            theme.add(e.text());
+            // いつからか「みんなの診断結果」へのリンクがテーマ行内に入るようになったので省く
+            if (!"みんなの診断結果".equals(e.text())) {
+                theme.add(e.text());
+            }
         }
         //Fav数を取得
         int favs = 0;
