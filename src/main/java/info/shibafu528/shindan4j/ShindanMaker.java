@@ -25,11 +25,6 @@ public class ShindanMaker {
             Pattern.compile("診断された回数：([0-9,]+) 回")
     };
 
-    private static final Pattern[] INLINELIST_PATTERNS = new Pattern[] {
-            Pattern.compile("(\\d{1,3}(?:,\\d{3})*)人が診断"),
-            Pattern.compile("結果パターン(\\d{1,3}(?:,\\d{3})*)通り")
-    };
-
     private ShindanMaker() {}
 
     public static int getTimeout() {
