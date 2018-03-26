@@ -1,5 +1,6 @@
 package info.shibafu528.shindan4j;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -47,6 +48,12 @@ public class ShindanMakerTest {
         Assert.assertNotNull(sl);
         for (Shindan shindan : sl) {
             System.out.println(shindan);
+            if (shindan.getPageId() == 438894) {
+                Assert.assertEquals("おしりターボ", shindan.getTitle());
+                Assert.assertEquals("ボーボボ", shindan.getDescription());
+                Assert.assertEquals("@Getaji", shindan.getAuthorName());
+                Assert.assertThat(shindan.getThemes(), CoreMatchers.hasItem("身内ネタ"));
+            }
         }
     }
 
