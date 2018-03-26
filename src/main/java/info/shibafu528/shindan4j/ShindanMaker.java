@@ -197,15 +197,8 @@ public class ShindanMaker {
                 Elements elemHashtag = e.select("span[class=hushtag]");
                 String hashtag = ((elemHashtag != null)? elemHashtag.text() : null);
                 //概要
-                Elements elemDesc = e.select("td[class=list_description]");
-                Pattern descPattern = Pattern.compile("^(.+)\\n<div");
-                Matcher descMatcher = descPattern.matcher(elemDesc.html());
-                String desc;
-                if (descMatcher.find()) {
-                    desc = Jsoup.parseBodyFragment(descMatcher.group(1)).text();
-                } else {
-                    desc = "";
-                }
+                Elements elemDesc = e.select(".list_description_text");
+                String desc = ((elemDesc != null) ? elemDesc.text() : "");
                 //インスタンス作って要素リストに格納
                 summary.setAuthorName(author)
                         .setHashTag(hashtag)
