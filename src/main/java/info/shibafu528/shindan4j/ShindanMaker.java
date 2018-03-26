@@ -93,7 +93,9 @@ public class ShindanMaker {
         int resultPatterns = 0;
         Element elemResultPattern = doc.select("span.shindanstats_label b").first();
         if (elemResultPattern != null) {
-            resultPatterns = Integer.valueOf(elemResultPattern.text());
+            try {
+                resultPatterns = numberFormat.parse(elemResultPattern.text()).intValue();
+            } catch (ParseException ignored) {}
         }
         //POST先URLを取得
         String postUrl = doc.select("form#form").first().attr("action");
