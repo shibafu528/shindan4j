@@ -18,10 +18,17 @@ public class ShindanMakerTest {
         Assert.assertEquals("おしりターボ", s.getTitle());
         Assert.assertEquals("ボーボボ", s.getDescription());
         Assert.assertEquals("Getaji", s.getAuthorName());
-        Assert.assertEquals(64, s.getResultPatterns());
+        Assert.assertEquals("64", s.getResultPatterns());
         Assert.assertThat(s.getThemes(), CoreMatchers.hasItem("身内ネタ"));
         Assert.assertThat(s.getThemes(), CoreMatchers.not(CoreMatchers.hasItem("みんなの診断結果")));
         System.out.println(s);
+    }
+
+    @Test
+    public void testGetTooManyPatternShindan() throws Exception {
+        Shindan s = ShindanMaker.getShindan(783234);
+        Assert.assertNotNull(s);
+        Assert.assertEquals("990044880209748260295442169856", s.getResultPatterns());
     }
 
     @Test

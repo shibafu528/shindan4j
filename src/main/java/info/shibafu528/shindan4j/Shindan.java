@@ -26,7 +26,7 @@ public interface Shindan extends Serializable{
 
     int getFavoritedCount();
 
-    long getResultPatterns();
+    String getResultPatterns();
 
     boolean isHot();
 

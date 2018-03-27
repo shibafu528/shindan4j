@@ -90,12 +90,13 @@ public class ShindanMaker {
             } catch (ParseException ignored) {}
         }
         //結果パターン数を取得
-        long resultPatterns = 0;
-        Element elemResultPattern = doc.select("span.shindanstats_label b").first();
+        String resultPatterns = "0";
+        Element elemResultPattern = doc.select("#result_pattern1 b").first();
+        if (elemResultPattern == null) {
+            elemResultPattern = doc.select("#result_pattern0 b").first();
+        }
         if (elemResultPattern != null) {
-            try {
-                resultPatterns = numberFormat.parse(elemResultPattern.text()).longValue();
-            } catch (ParseException ignored) {}
+            resultPatterns = elemResultPattern.text().replaceAll("[^0-9]", "");
         }
         //POST先URLを取得
         String postUrl = doc.select("form#form").first().attr("action");

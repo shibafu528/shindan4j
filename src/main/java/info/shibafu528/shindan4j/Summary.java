@@ -17,13 +17,13 @@ class Summary implements Shindan {
     private List<String> themes;
     private int accessCount;
     private int favoritedCount;
-    private long resultPatterns;
+    private String resultPatterns;
     private boolean isHot;
     private boolean isPickup;
 
     Summary() {}
 
-    Summary(int pageId, String title, String description, String authorName, String hashTag, List<String> themes, int accessCount, int favoritedCount, long resultPatterns, boolean isHot, boolean isPickup) {
+    Summary(int pageId, String title, String description, String authorName, String hashTag, List<String> themes, int accessCount, int favoritedCount, String resultPatterns, boolean isHot, boolean isPickup) {
         setPageId(pageId);
         this.title = title;
         this.description = description;
@@ -124,7 +124,7 @@ class Summary implements Shindan {
         return favoritedCount;
     }
 
-    public long getResultPatterns() {
+    public String getResultPatterns() {
         return resultPatterns;
     }
 
