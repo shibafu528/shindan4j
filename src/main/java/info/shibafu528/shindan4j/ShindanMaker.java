@@ -78,8 +78,8 @@ public class ShindanMaker {
             }
         }
         //作者名を取得
-        Elements elemAuthor = doc.select("a[href^=/author/]:not(.btn)");
-        String author = ((elemAuthor != null)? elemAuthor.select("a").text() : null);
+        Elements elemAuthor = doc.select(".author_link");
+        String author = ((elemAuthor != null)? elemAuthor.first().text().replace("@", "") : null);
         //アクセスカウンターを取得
         int accessCounter = 0;
         NumberFormat numberFormat = NumberFormat.getInstance();
