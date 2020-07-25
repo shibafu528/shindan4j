@@ -28,14 +28,14 @@ public class ShindanMakerTest {
     public void testGetTooManyPatternShindan() throws Exception {
         Shindan s = ShindanMaker.getShindan(783234);
         Assert.assertNotNull(s);
-        Assert.assertEquals("990044880209748260295442169856", s.getResultPatterns());
+        Assert.assertEquals("970430967263085761656202734567430382434584515394412269988890690387125111655522572640976896", s.getResultPatterns());
     }
 
     @Test
     public void testPostShindan() throws Exception {
         ShindanResult result = ShindanMaker.getShindan(258437).shindan("名前name");
         System.out.println(result.getDisplayResult() + " : " + result.getPage());
-        Assert.assertEquals("名前name.", result.getDisplayResult());
+        Assert.assertEquals("名前name.\n#shindanmaker", result.getDisplayResult());
     }
 
     @Test
