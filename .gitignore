@@ -42,3 +42,4 @@ com_crashlytics_export_strings.xml
 hs_err_pid*
 
 !gradle/wrapper/gradle-wrapper.jar
+.gradle/
