@@ -118,7 +118,7 @@ public class ShindanMaker {
 
     public static List<Shindan> search(String query, int page, boolean orderByNew) throws IOException {
         if (orderByNew) {
-            return getListElements(getDocument(ListMode.SEARCH.toUrlString(page, "q", query, "order", "new")));
+            return getListElements(getDocument(ListMode.SEARCH.toUrlString(page, "q", query, "order", "latest")));
         } else {
             return getListElements(getDocument(ListMode.SEARCH.toUrlString(page, "q", query)));
         }
@@ -126,9 +126,9 @@ public class ShindanMaker {
 
     public static List<Shindan> themeSearch(String theme, int page, boolean orderByNew) throws IOException {
         if (orderByNew) {
-            return getListElements(getDocument(ListMode.THEME.toUrlString(page, "tag", theme, "order", "new")));
+            return getListElements(getDocument(ListMode.THEME.toUrlString(page, "q", theme, "order", "latest")));
         }else {
-            return getListElements(getDocument(ListMode.THEME.toUrlString(page, "tag", theme)));
+            return getListElements(getDocument(ListMode.THEME.toUrlString(page, "q", theme)));
         }
     }
 
@@ -159,62 +159,56 @@ public class ShindanMaker {
     private static List<Shindan> getListElements(Document doc) throws IOException {
         List<Shindan> summaries = new ArrayList<>();
         //リストの各要素の親をとる
-        Elements tables = doc.select("table[class=list_list]");
+        Element tables = doc.getElementById("shindan-index");
         //各要素をパース
-        //  2014/3/4以降ページ構造変化により、trタグ2つで1組となった、めんどくさい
         //TODO: もっととれる要素あると思う
-        Summary summary = null;
-        for (Element e : tables.select("tr")) {
-            if (summary == null) {
-                //タイトルとID
-                Elements elemTitle = e.select("a[class=list_title]");
-                String title = elemTitle.text();
-                if (title == null || "".equals(title)) {
-                    //タイトル無いやつとか少なくとも診断では無さそうなので飛ばす
-                    continue;
-                }
-                int pageId = Integer.valueOf(elemTitle.attr("href").replaceAll("[a-zA-Z-/]", ""));
-                //カウンター
-                Elements elemNum = e.select("span[class=list_num]");
-                String regex = "\\d+";
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(elemNum.text().replaceAll(",", ""));
-                int counter = 0;
-                if (matcher.find()) {
-                    counter = Integer.valueOf(matcher.group());
-                }
-                //組立機に突っ込む
-                summary = new Summary()
-                        .setPageId(pageId)
-                        .setTitle(title)
-                        .setAccessCount(counter);
-            } else {
-                //作者
-                Elements elemAuthor = e.select("span[class=list_author]");
-                String author = ((elemAuthor != null)? elemAuthor.select("a").text() : null);
-                //テーマラベル
-                Elements elemTheme = e.select("a[class=themelabel]");
-                List<String> themelabel = new ArrayList<>();
-                if (elemTheme != null) {
-                    for (Element et : elemTheme) {
-                        themelabel.add(et.text());
-                    }
-                }
-                //ハッシュタグ
-                Elements elemHashtag = e.select("span[class=hushtag]");
-                String hashtag = ((elemHashtag != null)? elemHashtag.text() : null);
-                //概要
-                Elements elemDesc = e.select(".list_description_text");
-                String desc = ((elemDesc != null) ? elemDesc.text() : "");
-                //インスタンス作って要素リストに格納
-                summary.setAuthorName(author)
-                        .setHashTag(hashtag)
-                        .setThemes(themelabel)
-                        .setDescription(desc);
-                assert summary.isCompleteElements();
-                summaries.add(summary);
-                summary = null;
+        for (Element e : tables.select("[id^=shindan-row-]")) {
+            //タイトルとID
+            Elements elemTitle = e.select("a.shindanLink");
+            String title = elemTitle.text();
+            if (title == null || "".equals(title)) {
+                //タイトル無いやつとか少なくとも診断では無さそうなので飛ばす
+                continue;
             }
+            String[] titleFragments = elemTitle.attr("href").split("/");
+            int pageId = Integer.valueOf(titleFragments[titleFragments.length - 1]);
+            //カウンター
+            Elements elemNum = e.select(".label-donenumber");
+            String regex = "\\d+";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(elemNum.text().replaceAll(",", ""));
+            int counter = 0;
+            if (matcher.find()) {
+                counter = Integer.valueOf(matcher.group());
+            }
+            //作者
+            Elements elemAuthor = e.select(".label-user");
+            String author = ((elemAuthor != null)? elemAuthor.select("a").text() : null);
+            //テーマラベル
+            Elements elemTheme = e.select(".label-theme");
+            List<String> themelabel = new ArrayList<>();
+            if (elemTheme != null) {
+                for (Element et : elemTheme) {
+                    themelabel.add(et.text());
+                }
+            }
+            //ハッシュタグ
+            Elements elemHashtag = e.select(".label-hashtag");
+            String hashtag = ((elemHashtag != null)? elemHashtag.text() : null);
+            //概要
+            Elements elemDesc = e.select(".shindan-index-description");
+            String desc = ((elemDesc != null) ? elemDesc.text() : "");
+            //インスタンス作って要素リストに格納
+            Summary summary = new Summary()
+                    .setPageId(pageId)
+                    .setTitle(title)
+                    .setAccessCount(counter)
+                    .setAuthorName(author)
+                    .setHashTag(hashtag)
+                    .setThemes(themelabel)
+                    .setDescription(desc);
+            assert summary.isCompleteElements();
+            summaries.add(summary);
         }
         return summaries;
     }

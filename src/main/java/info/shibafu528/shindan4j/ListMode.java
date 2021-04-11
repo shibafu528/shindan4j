@@ -7,22 +7,23 @@ import java.net.URLEncoder;
  * Created by shibafu on 14/06/15.
  */
 public enum ListMode {
-    NEW("0"),
-    BEST("1"),
+    NEW("latest"),
+    BEST("overall"),
     HOT,
     PICKUP,
     DAILY,
     MONTHLY,
-    FAVORITE("fav"),
+    FAVORITE("favorite"),
     FAVORITE_HOT("favhot"),
     PICTURE("pic"),
     MOVIE("mov"),
+    CHART,
     SEARCH,
-    THEME("tag");
+    THEME("themes");
 
-    private static final String LISTPAGE_URL = "https://shindanmaker.com/c/list?";
+    private static final String LISTPAGE_URL = "https://shindanmaker.com/list/";
 
-    private String value;
+    private final String value;
 
     private ListMode() {
         this.value = name().toLowerCase();
@@ -39,9 +40,8 @@ public enum ListMode {
 
     public String toUrlString(int page, String... queries) throws UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder(LISTPAGE_URL);
-        sb.append("mode=");
         sb.append(toString());
-        sb.append("&p=");
+        sb.append("?p=");
         sb.append(page);
         String key = null;
         for (String query : queries) {
