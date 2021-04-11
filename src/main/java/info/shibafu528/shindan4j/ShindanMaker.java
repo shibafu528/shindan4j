@@ -46,31 +46,26 @@ public class ShindanMaker {
     public static Shindan getShindan(int pageId) throws IOException {
         String url = "https://shindanmaker.com/" + pageId;
         Document doc = getDocument(url);
-        //タイトルブロックを取得
-        Elements titleBlock = doc.select("div.shindantitle_block");
         //タイトル、説明文を取得
-        Element titleElement = titleBlock.select("div.shindantitle2").first();
+        Element titleElement = doc.getElementById("shindanTitle");
         if (titleElement == null) {
-            throw new IOException("タイトル<div class=\"shindantitle2\">がHTML上に見つかりません\nURL:" + url);
+            throw new IOException("タイトル (#shindanTitle) がHTML上に見つかりません\nURL:" + url);
         }
         String title = titleElement.text().trim();
-        Element descElement = titleBlock.select("div.shindandescription").first();
+        Element descElement = doc.getElementById("shindanDescription");
         if (descElement == null) {
-            throw new IOException("説明文<div class=\"shindandescription\">がHTML上に見つかりません\nURL:" + url);
+            throw new IOException("説明文 #shindanDescription がHTML上に見つかりません\nURL:" + url);
         }
         String desc = descElement.text().trim();
         //テーマラベルを取得
         List<String> theme = new ArrayList<>();
-        Elements themes = doc.select("a[class=themelabel]");
+        Elements themes = doc.select("a.label-theme");
         for (Element e : themes) {
-            // いつからか「みんなの診断結果」へのリンクがテーマ行内に入るようになったので省く
-            if (!"みんなの診断結果".equals(e.text())) {
-                theme.add(e.text());
-            }
+            theme.add(e.text());
         }
         //Fav数を取得
         int favs = 0;
-        Elements favlabel = doc.select("span[class*=favlabel]");
+        Elements favlabel = doc.select(".label-favorite");
         if (favlabel.first() != null) {
             Matcher m = Pattern.compile("(\\d+)").matcher(favlabel.first().text());
             if (m.find()) {
@@ -78,36 +73,42 @@ public class ShindanMaker {
             }
         }
         //作者名を取得
-        Elements elemAuthor = doc.select(".author_link");
+        Elements elemAuthor = doc.select(".label-user-shindan");
         String author = ((elemAuthor != null)? elemAuthor.first().text().replace("@", "") : null);
         //アクセスカウンターを取得
         int accessCounter = 0;
         NumberFormat numberFormat = NumberFormat.getInstance();
-        Element doneNumber = doc.select(".shindanstats_donenumber").first();
+        Element doneNumber = doc.getElementById("donenumber");
         if (doneNumber != null) {
             try {
                 accessCounter = numberFormat.parse(doneNumber.text()).intValue();
             } catch (ParseException ignored) {}
         }
         //結果パターン数を取得
+        // TODO: 2021/4/11 リニューアル以降か分からないけど「結果パターン ? 通り」と表現されている場合もある。未対応。
         String resultPatterns = "0";
-        Element elemResultPattern = doc.select("#result_pattern1 b").first();
-        if (elemResultPattern == null) {
-            elemResultPattern = doc.select("#result_pattern0 b").first();
+        Element elemResultPattern = null;
+        for (Element el : doc.select("#shindanInfo .label-etc")) {
+            if (el.text().trim().startsWith("結果パターン")) {
+                elemResultPattern = el.select("b").first();
+            }
         }
         if (elemResultPattern != null) {
             resultPatterns = elemResultPattern.text().replaceAll("[^0-9]", "");
         }
         //POST先URLを取得
-        String postUrl = doc.select("form#form").first().attr("action");
-        postUrl = "https://shindanmaker.com" + postUrl;
+        String postUrl = doc.getElementById("shindanForm").attr("action");
+        if (!postUrl.startsWith("https://shindanmaker.com")) {
+            // NOTE: 2021/4/11 リニューアル以降たぶん不要
+            postUrl = "https://shindanmaker.com" + postUrl;
+        }
         //インスタンスを返す
         return new ShindanPage(
                 pageId, title, desc, author,
                 "", theme,
                 accessCounter, favs, resultPatterns,
-                doc.select("a[class=hotlabel]").first() != null,
-                doc.select("a[class=pickuplabel]").first() != null,
+                doc.select("a.label-hot").first() != null,
+                doc.select("a.label-pickup").first() != null,
                 postUrl);
     }
 
