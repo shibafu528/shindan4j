@@ -31,7 +31,7 @@ class ShindanPage extends Summary{
                 .timeout(ShindanMaker.getTimeout())
                 .cookies(session.cookies)
                 .data("_token", session.token)
-                .data("name", name)
+                .data("shindanName", name)
                 .post();
         //結果を取得
         Element fullElem = doc.select("textarea#copy-textarea-all").first();
